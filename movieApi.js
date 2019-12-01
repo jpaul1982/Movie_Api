@@ -5,9 +5,15 @@ const rp = require('request-promise');
 
 app.set('view engine', 'ejs');
 
+app.get('/', (req, res) => {
+    res.render("search")
+});
+
 
 app.get('/results', (req, res) => {
-    rp('http://www.omdbapi.com/?s=star&apikey=thewdb')
+    let query = req.query.search;
+    let url = 'http://www.omdbapi.com/?s=' + query + '&apikey=thewdb';
+    rp(url)
         .then((body) => {
             let data = JSON.parse(body);
             res.render('results', { data: data });
@@ -17,7 +23,6 @@ app.get('/results', (req, res) => {
             console.log(err);
         })
 });
-
 
 
 app.listen(PORT, () => {
