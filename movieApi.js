@@ -2,20 +2,25 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const rp = require('request-promise');
-const request = require('request');
+
+app.set('view engine', 'ejs');
+
 
 app.get('/results', (req, res) => {
-    rp('http://www.omdbapi.com/?t=star&apikey=thewdb')
-    .then((body) => {
-        res.send(body);
-        console.log(body);
+    rp('http://www.omdbapi.com/?s=star&apikey=thewdb')
+        .then((body) => {
+            let data = JSON.parse(body);
+            res.render('results', { data: data });
+            console.log(body);
         })
-    .catch((err) => {
-        console.log(err);
+        .catch((err) => {
+            console.log(err);
         })
 });
 
+
+
 app.listen(PORT, () => {
     console.log("Movie App is listening on PORT:", PORT);
-    
+
 });
